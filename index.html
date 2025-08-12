@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crypto Leasing Offers — 5% APR</title>
+  <meta name="description" content="Browse lease offers for a curated set of crypto assets. Shows amount, price/coin, notional value, and 5% APR interest with monthly estimates." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html{scroll-behavior:smooth}
+    body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03))}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .sticky-th th{position:sticky;top:0;background-color:rgb(2 6 23/.8);backdrop-filter:saturate(160%) blur(4px)}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-cyan-500/15 ring-1 ring-cyan-400/30 grid place-items-center text-cyan-300 font-black">PV</div>
+        <div>
+          <p class="text-sm text-slate-300">Leasing Desk</p>
+          <h1 class="text-lg font-semibold">Crypto Leasing Offers — 5% APR</h1>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-3 text-sm text-slate-300">
+        <a class="hover:text-white" href="#offers">Offers</a>
+        <a class="hover:text-white" href="#calc">Calculator</a>
+        <a class="rounded-xl bg-cyan-400/20 text-cyan-200 px-4 py-2 hover:bg-cyan-400/30" href="#contact">Inquire</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="relative">
+      <div class="absolute inset-0 bg-[radial-gradient(60%_60%_at_10%_0%,rgba(56,189,248,0.18),transparent),radial-gradient(40%_50%_at_90%_0%,rgba(56,189,248,0.12),transparent)]"></div>
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+        <div class="max-w-4xl space-y-4">
+          <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">Transparent lease terms. Clear pricing.</h2>
+          <p class="text-slate-300">All offers below are quoted at a fixed <span class="font-semibold text-slate-100">5% APR</span>. For each asset, we show <em>amount</em>, <em>price per coin</em>, <em>notional value</em>, and estimated <em>monthly interest</em>. This is a view-only page; reach out to initiate a lease.</p>
+          <div class="text-xs text-slate-400">Disclaimer: Figures shown are estimates and not financial advice. Availability subject to change.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Offers -->
+    <section id="offers" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 space-y-4">
+        <div class="card rounded-2xl p-4 ring-1 ring-white/10">
+          <div class="flex flex-wrap items-center gap-3">
+            <input id="q" type="search" placeholder="Search by name or symbol…" class="w-full sm:w-72 rounded-xl bg-white/5 border border-white/10 px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/40" />
+            <select id="sort" class="rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm">
+              <option value="value_desc">Sort by Value (high→low)</option>
+              <option value="value_asc">Sort by Value (low→high)</option>
+              <option value="name_asc">Name (A→Z)</option>
+              <option value="name_desc">Name (Z→A)</option>
+            </select>
+            <div class="ml-auto text-sm text-slate-400">APR: <span id="aprLabel">5%</span> · Total Notional: <span id="totalValue">$0</span></div>
+          </div>
+        </div>
+
+        <div class="overflow-auto rounded-2xl ring-1 ring-white/10">
+          <table class="min-w-full text-sm">
+            <thead class="sticky-th text-left text-slate-200">
+              <tr>
+                <th class="px-4 py-3">Name</th>
+                <th class="px-4 py-3">Symbol</th>
+                <th class="px-4 py-3 text-right">Amount</th>
+                <th class="px-4 py-3 text-right">Price / Coin</th>
+                <th class="px-4 py-3 text-right">Notional Value</th>
+                <th class="px-4 py-3 text-right">Monthly Interest</th>
+                <th class="px-4 py-3 text-right">Daily Interest</th>
+              </tr>
+            </thead>
+            <tbody id="rows" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator -->
+    <section id="calc" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div class="card rounded-2xl p-6 ring-1 ring-white/10 grid md:grid-cols-2 gap-6 items-start">
+          <div>
+            <h3 class="text-2xl font-bold mb-2">Lease Cost Calculator</h3>
+            <p class="text-slate-300 mb-4">Select an asset to prefill, or enter custom values. Interest assumes simple APR with equal monthly accrual.</p>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="block text-sm">Amount
+                <input id="cAmt" type="number" step="any" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
+              </label>
+              <label class="block text-sm">Price / Coin ($)
+                <input id="cPpc" type="number" step="any" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
+              </label>
+              <label class="block text-sm">APR (%)
+                <input id="cApr" type="number" step="any" value="5" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
+              </label>
+              <label class="block text-sm">Term (months)
+                <input id="cMonths" type="number" step="1" value="12" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
+              </label>
+            </div>
+            <div class="mt-4 text-sm space-y-1">
+              <div>Total Notional: <span id="cNotional" class="font-semibold"></span></div>
+              <div>Monthly Interest: <span id="cMonthly" class="font-semibold"></span></div>
+              <div>Total Interest (term): <span id="cTotal" class="font-semibold"></span></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-2">Quick Pick</h4>
+            <div id="quick" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+            <p class="text-xs text-slate-400 mt-3">Note: Results are estimates only. Final terms may vary based on availability and risk.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div class="card rounded-2xl p-6 ring-1 ring-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h3 class="text-2xl font-bold">Interested in leasing?</h3>
+            <p class="text-slate-300">Email <a class="text-cyan-300 hover:underline" href="mailto:paytontvirgil@gmail.com?subject=Crypto%20Leasing%20Inquiry">paytontvirgil@gmail.com</a> with the assets and term you want.</p>
+          </div>
+          <a href="#offers" class="rounded-xl border border-white/15 px-5 py-3 hover:bg-white/5">Back to Offers</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-slate-400">© <span id="year"></span> Payton Virgil · View-only pricing · 5% APR.</p>
+      <p class="text-xs text-slate-500">Estimates only. Not financial advice.</p>
+    </div>
+  </footer>
+
+  <script>
+    const APR = 0.05; // 5%
+    const MONTHS_IN_YEAR = 12;
+    const fmtUSD = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2});
+    const fmtNum = new Intl.NumberFormat('en-US');
+
+    const DATA = [
+      { name:'Gem', symbol:'GEM', amount:99958000, price:27.00 },
+      { name:'Dogecoin', symbol:'DOGE', amount:28710538, price:0.21 },
+      { name:'TrumpVance', symbol:'TRUMPVANCE', amount:10000000, price:0.50 },
+      { name:'Kekistan', symbol:'KEKISTAN', amount:10000000, price:0.30 },
+      { name:'Shadilay', symbol:'SHADILAY', amount:10000000, price:0.30 },
+      { name:'Ancapistan', symbol:'ANCAPISTAN', amount:10000000, price:0.20 },
+      { name:'Vance', symbol:'VANCE', amount:10000000, price:0.10 },
+      { name:'JohnGalt', symbol:'JOHNGALT', amount:10000000, price:0.10 },
+      { name:'Trump2016', symbol:'TRUMP2016', amount:10000000, price:0.10 },
+      { name:'Bitcoin', symbol:'BTC', amount:6, price:114703.34 },
+      { name:'Madlads', symbol:'MADLADS', amount:10000000, price:0.05 },
+      { name:'Libertaria', symbol:'LIBERTARIA', amount:10000000, price:0.05 },
+      { name:'PepeTheFrog', symbol:'PEPE', amount:10000000, price:0.05 },
+      { name:'Hide The Pain Harold', symbol:'HAROLD', amount:10000000, price:0.05 },
+      { name:'SuccessKid', symbol:'SUCCESSKID', amount:10000000, price:0.05 },
+      { name:'Distracted Boyfriend', symbol:'DISTRACTED', amount:10000000, price:0.05 },
+      { name:'Grumpy Cat', symbol:'GRUMPYCAT', amount:10000000, price:0.05 },
+      { name:'This Is Fine Dog', symbol:'THISISFINE', amount:10000000, price:0.05 },
+      { name:'Bills Mafia', symbol:'BILLS', amount:10000000, price:0.05 },
+      { name:'Suprised Pikachu', symbol:'PIKACHU', amount:10000000, price:0.05 },
+      { name:'Change My Mind', symbol:'CHANGEMYMIND', amount:10000000, price:0.05 },
+      { name:'Roll Safe', symbol:'ROLLSAFE', amount:10000000, price:0.05 },
+      { name:"Ight Imma Head Out", symbol:'IMMAHEADOUT', amount:10000000, price:0.05 },
+      { name:'Buffalo Token', symbol:'BUFF', amount:141350000, price:0.001 },
+      { name:'Ethereum', symbol:'ETH', amount:6, price:3677.76 },
+      { name:'Telegram Drops', symbol:'TDROP', amount:10000, price:1.00 },
+      { name:'Pi Coin', symbol:'PI', amount:2289, price:1.71 },
+      { name:'BNB', symbol:'BNB', amount:6, price:569.26 },
+      { name:'RUBI Coin', symbol:'RUBI', amount:437, price:5.54 },
+      { name:'Bee', symbol:'BEE', amount:2664, price:0.80 },
+      { name:'Tether', symbol:'USDT', amount:1838, price:1.00 },
+      { name:'Remint', symbol:'REMINT', amount:3145, price:0.50 },
+      { name:'Dream', symbol:'DREAM', amount:25119, price:0.06 },
+      { name:'Social Good', symbol:'SG', amount:3999, price:0.23 },
+      { name:'Solana', symbol:'SOL', amount:6, price:140.00 },
+      { name:'Shiba Inu', symbol:'SHIB', amount:28570000, price:0.00002 },
+      { name:'Otara', symbol:'OTARA', amount:114, price:5.00 },
+      { name:'Nitrogen Coin', symbol:'NITROGEN', amount:500, price:1.07 },
+      { name:'DB Network', symbol:'DB', amount:23056, price:0.02 },
+      { name:'TIME Coin', symbol:'TIME', amount:37137, price:0.01 },
+      { name:'Star Coin', symbol:'STAR', amount:4577, price:0.06 },
+      { name:'Sidra', symbol:'SIDRA', amount:108, price:2.30 },
+      { name:'Alpha Coin', symbol:'ALPHA', amount:19418, price:0.01 },
+      { name:'Nova Coin', symbol:'NOVA', amount:1652, price:0.08 },
+      { name:'Eagle Token', symbol:'EGON', amount:6167, price:0.01 },
+      { name:'Ton', symbol:'TON', amount:10, price:5.78 },
+      { name:'P2P', symbol:'P2P', amount:60, price:0.65 },
+      { name:'Bitcoin Cash', symbol:'BCH', amount:0.1, price:380.31 },
+      { name:'Phi', symbol:'PHI', amount:380, price:0.06 },
+      { name:'Internet Computer', symbol:'ICP', amount:2, price:7.93 },
+      { name:'Cheatmoon', symbol:'CTM', amount:313414, price:0.00005 },
+      { name:'PancakeSwap', symbol:'CAKE', amount:7, price:2.12 },
+      { name:'Blockrium', symbol:'BRC', amount:761, price:0.02 },
+      { name:'cPen', symbol:'PEN', amount:319, price:0.04 },
+      { name:'Opincur', symbol:'CIO', amount:921, price:0.01 },
+      { name:'Fantom', symbol:'FTT', amount:6, price:1.38 },
+      { name:'Polygon', symbol:'MATIC', amount:11, price:0.55 },
+      { name:'Nodle', symbol:'NODL', amount:935, price:0.004 },
+      { name:'Stacks', symbol:'STX', amount:6, price:0.65 },
+      { name:'Coughing Cat', symbol:'CCT', amount:0.6, price:6.08 },
+      { name:'World Chain', symbol:'WCN', amount:8750, price:0.0003 },
+      { name:'Fone', symbol:'FONE', amount:470, price:0.004 },
+      { name:'Co-Met Network', symbol:'COMET', amount:1618, price:0.001 },
+      { name:'ApeCoin', symbol:'APE', amount:2, price:0.98 },
+      { name:'Bitcoin Legend', symbol:'BCL', amount:9459, price:0.0001 },
+      { name:'Szabo', symbol:'SZABO', amount:499, price:0.001 },
+      { name:'Metro Coin', symbol:'METRO', amount:24, price:0.02 },
+      { name:'Omega coin', symbol:'OMN', amount:44, price:0.01 },
+      { name:'Robox', symbol:'ROX', amount:0.3, price:1.00 },
+      { name:'TTCoin', symbol:'TC', amount:1900, price:0.0001 },
+      { name:'Litchi Coin', symbol:'LITCHI', amount:2199, price:0.0001 },
+      { name:'ProjectEarth', symbol:'PE', amount:189, price:0.001 },
+      { name:'Neural Hash', symbol:'NRH', amount:1, price:0.13 },
+      { name:'Midoin', symbol:'MDN', amount:0.5, price:0.16 },
+      { name:'Mobile Coin', symbol:'MBC', amount:1, price:0.02 },
+      { name:'Li Coin', symbol:'LI', amount:600, price:0.00003 },
+      { name:'MinexCoin', symbol:'MNX', amount:0.2, price:0.03 },
+      { name:'Qubit', symbol:'QUBIT', amount:412, price:0.000003 },
+      { name:'Atalis Network', symbol:'ALS', amount:3, price:0.0001 },
+      { name:'Orbaic', symbol:'ACI', amount:8, price:0.0000004 },
+      { name:'Bubble', symbol:'BBLE', amount:3150, price:0.0000000000002 },
+    ];
+
+    function monthlyInterest(value, apr=APR){ return value * (apr / 12); }
+    function dailyInterest(value, apr=APR){ return value * (apr / 365); }
+
+    function rowHTML(x){
+      const value = x.amount * x.price;
+      return `<tr class="hover:bg-white/5">
+        <td class="px-4 py-3">${x.name}</td>
+        <td class="px-4 py-3 mono">${x.symbol}</td>
+        <td class="px-4 py-3 text-right">${fmtNum.format(x.amount)}</td>
+        <td class="px-4 py-3 text-right">${fmtUSD.format(x.price)}</td>
+        <td class="px-4 py-3 text-right font-medium">${fmtUSD.format(value)}</td>
+        <td class="px-4 py-3 text-right text-cyan-300">${fmtUSD.format(monthlyInterest(value))}</td>
+        <td class="px-4 py-3 text-right">${fmtUSD.format(dailyInterest(value))}</td>
+      </tr>`;
+    }
+
+    function render(){
+      const q = document.getElementById('q').value.trim().toLowerCase();
+      const sort = document.getElementById('sort').value;
+      const filtered = DATA.filter(x => `${x.name} ${x.symbol}`.toLowerCase().includes(q));
+      const withVal = filtered.map(x => ({...x, value: x.amount * x.price }));
+      withVal.sort((a,b)=>{
+        switch(sort){
+          case 'value_asc': return a.value - b.value;
+          case 'name_asc': return a.name.localeCompare(b.name);
+          case 'name_desc': return b.name.localeCompare(a.name);
+          case 'value_desc':
+          default: return b.value - a.value;
+        }
+      });
+      const rows = withVal.map(rowHTML).join('');
+      document.getElementById('rows').innerHTML = rows || `<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400">No matches</td></tr>`;
+      const total = withVal.reduce((s,x)=> s + x.value, 0);
+      document.getElementById('totalValue').textContent = fmtUSD.format(total);
+      document.getElementById('aprLabel').textContent = `${(APR*100).toFixed(0)}%`;
+      buildQuick(withVal.slice(0, 9));
+      updateCalc();
+    }
+
+    function buildQuick(list){
+      const el = document.getElementById('quick');
+      el.innerHTML = list.map(x => `<button class="rounded-lg border border-white/10 px-3 py-2 text-left hover:bg-white/5" data-sym="${x.symbol}">
+        <div class="text-sm font-medium">${x.name} <span class="text-slate-400 mono">(${x.symbol})</span></div>
+        <div class="text-xs text-slate-400">Amt ${fmtNum.format(x.amount)} · ${fmtUSD.format(x.price)}/coin</div>
+      </button>`).join('');
+      el.querySelectorAll('button').forEach(btn => btn.addEventListener('click', ()=>{
+        const sym = btn.getAttribute('data-sym');
+        const x = DATA.find(r => r.symbol === sym);
+        if(!x) return;
+        document.getElementById('cAmt').value = x.amount;
+        document.getElementById('cPpc').value = x.price;
+        document.getElementById('cApr').value = APR*100;
+        updateCalc();
+        document.getElementById('calc').scrollIntoView({behavior:'smooth'});
+      }));
+    }
+
+    function updateCalc(){
+      const amt = parseFloat(document.getElementById('cAmt').value||'0');
+      const ppc = parseFloat(document.getElementById('cPpc').value||'0');
+      const aprPct = parseFloat(document.getElementById('cApr').value||'5');
+      const months = parseInt(document.getElementById('cMonths').value||'12',10);
+      const apr = (isFinite(aprPct) ? aprPct : 5) / 100;
+      const notional = amt * ppc;
+      const m = notional * (apr/12);
+      const total = m * months;
+      document.getElementById('cNotional').textContent = fmtUSD.format(notional);
+      document.getElementById('cMonthly').textContent = fmtUSD.format(m);
+      document.getElementById('cTotal').textContent = fmtUSD.format(total);
+    }
+
+    // Wire up
+    document.getElementById('q').addEventListener('input', render);
+    document.getElementById('sort').addEventListener('change', render);
+    ['cAmt','cPpc','cApr','cMonths'].forEach(id => document.getElementById(id).addEventListener('input', updateCalc));
+
+    // Boot
+    document.getElementById('year').textContent = new Date().getFullYear();
+    render();
+
+    // Tiny sanity tests (no framework)
+    (function(){
+      console.assert(typeof DATA[0].name==='string', 'DATA: has name');
+      console.assert(DATA.every(x=> typeof x.amount==='number' && typeof x.price==='number'), 'DATA: numbers ok');
+      const $v = 1000; console.assert(monthlyInterest($v) === $v*(APR/12), 'monthlyInterest formula');
+    })();
+  </script>
+</body>
+</html>
