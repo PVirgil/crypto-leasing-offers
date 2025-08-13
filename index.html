@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crypto Lending Offers — 5% APR (Minimal Columns + Robust Logos)</title>
-  <meta name="description" content="Professional crypto lending desk. Full asset list; table shows Name, Symbol, Amount, Monthly/Yearly interest per coin at 5% APR. Robust logo fallbacks. Bottom calculator with coin picker." />
+  <title>Crypto Lending Offers — 5% APR (Classic Layout + New Calculator)</title>
+  <meta name="description" content="Professional crypto lending desk. Minimal columns with full‑color logos. Live price option for majors. Bottom calculator takes Monthly Interest/coin as input and estimates totals." />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html{scroll-behavior:smooth}
@@ -13,8 +13,8 @@
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
     .sticky-th th{position:sticky;top:0;background-color:rgb(2 6 23/.85);backdrop-filter:saturate(160%) blur(4px)}
     .chip{font-size:11px;padding:.25rem .5rem;border-radius:9999px}
-    .logo{height:24px;width:24px;border-radius:9999px;object-fit:cover}
-    .placeholder{height:24px;width:24px;border-radius:9999px;display:grid;place-items:center;background:rgba(148,163,184,.15);color:#cbd5e1;font-size:10px;font-weight:700}
+    .logo{height:32px;width:32px;border-radius:9999px;object-fit:cover}
+    .placeholder{height:32px;width:32px;border-radius:9999px;display:grid;place-items:center;background:rgba(148,163,184,.15);color:#cbd5e1;font-size:12px;font-weight:700}
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100">
@@ -41,9 +41,9 @@
       <div class="absolute inset-0 bg-[radial-gradient(60%_60%_at_10%_0%,rgba(56,189,248,0.18),transparent),radial-gradient(40%_50%_at_90%_0%,rgba(56,189,248,0.12),transparent)]"></div>
       <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
         <div class="max-w-4xl space-y-4">
-          <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">Clean, compliant, and clear.</h2>
-          <p class="text-slate-300">The table shows only: <strong>Name</strong>, <strong>Symbol</strong>, <strong>Amount</strong>, <strong>Monthly Interest / Coin</strong>, and <strong>Yearly Interest / Coin</strong> at a fixed <span class="font-semibold text-slate-100">5% APR</span>. Live pricing for majors (if enabled) updates the interest calculations—but prices remain hidden.</p>
-          <div class="text-xs text-slate-400">Estimates only—not financial advice. Not an offer or solicitation. Terms subject to approval, KYC/AML, and availability.</div>
+          <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">Institutional look. Retail simple.</h2>
+          <p class="text-slate-300">Table shows only: <strong>Name</strong>, <strong>Symbol</strong>, <strong>Amount</strong>, <strong>Monthly</strong> & <strong>Yearly</strong> interest <em>per coin</em> at a fixed <span class="font-semibold text-slate-100">5% APR</span>. Full‑color logos with graceful fallbacks. Toggle live prices for majors to refine interest math (prices stay hidden).</p>
+          <div class="text-xs text-slate-400">Estimates only — not financial advice. Not a solicitation. Terms subject to approval, KYC/AML, and availability.</div>
         </div>
       </div>
     </section>
@@ -86,13 +86,13 @@
       </div>
     </section>
 
-    <!-- Calculator -->
+    <!-- Calculator (Monthly Interest/Coin input) -->
     <section id="calc" class="border-t border-white/10">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div class="card rounded-2xl p-6 ring-1 ring-white/10 grid md:grid-cols-2 gap-6 items-start">
           <div>
             <h3 class="text-2xl font-bold mb-2">Loan Cost Calculator</h3>
-            <p class="text-slate-300 mb-4">Pick a coin, or enter custom values. Interest assumes simple APR with equal monthly accrual.</p>
+            <p class="text-slate-300 mb-4">Enter <strong>Monthly Interest per Coin</strong>. We infer the implied price from APR and estimate totals. Pick a coin to prefill with live/stored rates.</p>
             <div class="grid grid-cols-2 gap-3 mb-3">
               <label class="block text-sm col-span-2">Select Coin
                 <select id="coinSelect" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm"></select>
@@ -100,8 +100,8 @@
               <label class="block text-sm">Amount (coins)
                 <input id="cAmt" type="number" step="any" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
               </label>
-              <label class="block text-sm">Price / Coin ($)
-                <input id="cPpc" type="number" step="any" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
+              <label class="block text-sm">Monthly Interest / Coin ($)
+                <input id="cMi" type="number" step="any" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
               </label>
               <label class="block text-sm">APR (%)
                 <input id="cApr" type="number" step="any" value="5" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
@@ -111,8 +111,9 @@
               </label>
             </div>
             <div class="mt-2 text-sm space-y-1">
+              <div>Implied Price / Coin: <span id="cPrice" class="font-semibold"></span></div>
               <div>Total Notional: <span id="cNotional" class="font-semibold"></span></div>
-              <div>Monthly Interest: <span id="cMonthly" class="font-semibold"></span></div>
+              <div>Monthly Interest (portfolio): <span id="cMonthly" class="font-semibold"></span></div>
               <div>Total Interest (term): <span id="cTotal" class="font-semibold"></span></div>
             </div>
           </div>
@@ -147,11 +148,11 @@
   </footer>
 
   <script>
-    const APR = 0.05; // 5%
+    const APR_DEFAULT = 0.05; // 5%
     const fmtUSD = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:6});
     const fmtNum = new Intl.NumberFormat('en-US');
 
-    // === LOGO HELPERS ===
+    // === LOGOS (full‑color overrides first) ===
     const OVERRIDE_LOGOS = {
       BTC: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
       ETH: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
@@ -167,9 +168,10 @@
       APE: 'https://cryptologos.cc/logos/apecoin-ape-ape-logo.png',
       CAKE: 'https://cryptologos.cc/logos/pancakeswap-cake-logo.png',
       MATIC: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
+      SOLANA: 'https://cryptologos.cc/logos/solana-sol-logo.png',
     };
     const LOGO_BASE = 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128';
-    function makeLogoHTML(name, symbol){
+    function logoHTML(name, symbol){
       const s = (symbol||'').toLowerCase().replace(/[^a-z0-9]/g,'');
       const override = OVERRIDE_LOGOS[symbol?.toUpperCase?.()];
       const first = override || `${LOGO_BASE}/color/${s}.png`;
@@ -178,7 +180,7 @@
       return `<img src="${first}" data-alt="${alt}" alt="${symbol||name} logo" class="logo ring-1 ring-white/10" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src=this.dataset.alt;}else{this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',textContent:'${initials}'}));}">`;
     }
 
-    // Live price for majors (to compute interest per coin only)
+    // === LIVE PRICE (majors only, used to compute interest/coin) ===
     const CG_IDS = {
       BTC:'bitcoin', ETH:'ethereum', SOL:'solana', BNB:'binancecoin', USDT:'tether',
       MATIC:'matic-network', DOGE:'dogecoin', SHIB:'shiba-inu', TON:'toncoin',
@@ -195,7 +197,7 @@
         const map = {};
         for(const c of json){
           const sym = Object.keys(CG_IDS).find(k=>CG_IDS[k]===c.id);
-          if(!sym) continue; map[sym] = { price:c.current_price, image:c.image };
+          if(!sym) continue; map[sym] = { price:c.current_price };
         }
         livePrices = map; document.getElementById('liveStatus').textContent='Live';
         document.getElementById('liveStatus').className='chip bg-emerald-400/20 text-emerald-300';
@@ -207,7 +209,7 @@
       }
     }
 
-    // === DATA (full list you provided earlier) ===
+    // === DATA (full list) ===
     const DATA = [
       { name:'Gem', symbol:'GEM', amount:99958000, price:27.00 },
       { name:'Dogecoin', symbol:'DOGE', amount:28710538, price:0.21 },
@@ -292,14 +294,18 @@
       { name:'Bubble', symbol:'BBLE', amount:3150, price:0.0000000000002 },
     ];
 
+    // === TABLE RENDERING ===
+    function monthlyPerCoin(price, apr){ return price * (apr/12); }
+    function yearlyPerCoin(price, apr){ return price * apr; }
+
     function rowHTML(x){
       const live = document.getElementById('liveToggle').checked && livePrices[x.symbol];
+      const apr = (parseFloat(document.getElementById('cApr')?.value)|| (APR_DEFAULT*100)) / 100 || APR_DEFAULT; // sync with calc APR if edited
       const price = live ? livePrices[x.symbol].price : x.price;
-      const m = price * (APR/12);
-      const y = price * APR;
-      const logo = makeLogoHTML(x.name, x.symbol);
+      const m = monthlyPerCoin(price, apr);
+      const y = yearlyPerCoin(price, apr);
       return `<tr class="hover:bg-white/5">
-        <td class="px-4 py-3"><div class="flex items-center gap-3">${logo}<div class="font-medium">${x.name}</div></div></td>
+        <td class="px-4 py-3"><div class="flex items-center gap-3">${logoHTML(x.name,x.symbol)}<div class="font-medium">${x.name}</div></div></td>
         <td class="px-4 py-3 mono">${x.symbol}</td>
         <td class="px-4 py-3 text-right">${fmtNum.format(x.amount)}</td>
         <td class="px-4 py-3 text-right">${fmtUSD.format(m)}</td>
@@ -310,11 +316,13 @@
     function render(){
       const q = document.getElementById('q').value.trim().toLowerCase();
       const sort = document.getElementById('sort').value;
+      const apr = (parseFloat(document.getElementById('cApr')?.value)|| (APR_DEFAULT*100)) / 100 || APR_DEFAULT;
       const filtered = DATA.filter(x => `${x.name} ${x.symbol}`.toLowerCase().includes(q));
       const rows = filtered.slice();
       rows.sort((a,b)=>{
-        const ay = (document.getElementById('liveToggle').checked && livePrices[a.symbol] ? livePrices[a.symbol].price : a.price) * APR;
-        const by = (document.getElementById('liveToggle').checked && livePrices[b.symbol] ? livePrices[b.symbol].price : b.price) * APR;
+        const ap = (document.getElementById('liveToggle').checked && livePrices[a.symbol]? livePrices[a.symbol].price: a.price);
+        const bp = (document.getElementById('liveToggle').checked && livePrices[b.symbol]? livePrices[b.symbol].price: b.price);
+        const ay = yearlyPerCoin(ap, apr); const by = yearlyPerCoin(bp, apr);
         switch(sort){
           case 'year_asc': return ay - by;
           case 'name_asc': return a.name.localeCompare(b.name);
@@ -325,28 +333,34 @@
       });
       document.getElementById('rows').innerHTML = rows.map(rowHTML).join('') || `<tr><td colspan="5" class="px-4 py-6 text-center text-slate-400">No matches</td></tr>`;
       document.getElementById('assetCount').textContent = rows.length;
-      document.getElementById('aprLabel').textContent = `${(APR*100).toFixed(0)}%`;
+      document.getElementById('aprLabel').textContent = `${(apr*100).toFixed(0)}%`;
 
-      // Quick picks and calculator select
-      buildQuick(rows.slice(0,9));
+      buildQuick(rows.slice(0,9), apr);
       buildCoinSelect(rows);
     }
 
-    function buildQuick(list){
+    // === QUICK PICKS & CALC ===
+    function buildQuick(list, apr){
       const el = document.getElementById('quick'); if(!el) return;
-      el.innerHTML = list.map(x => `<button class="rounded-lg border border-white/10 px-3 py-2 text-left hover:bg-white/5" data-sym="${x.symbol}">
-        <div class="text-sm font-medium">${x.name} <span class="text-slate-400 mono">(${x.symbol})</span></div>
-        <div class="text-xs text-slate-400">Coins ${fmtNum.format(x.amount)} · Interest/yr ${fmtUSD.format((livePrices[x.symbol]?.price || x.price) * APR)}</div>
-      </button>`).join('');
+      el.innerHTML = list.map(x => {
+        const live = document.getElementById('liveToggle').checked && livePrices[x.symbol];
+        const price = live ? livePrices[x.symbol].price : x.price;
+        const m = monthlyPerCoin(price, apr);
+        return `<button class="rounded-lg border border-white/10 px-3 py-2 text-left hover:bg-white/5" data-sym="${x.symbol}">
+          <div class="text-sm font-medium">${x.name} <span class="text-slate-400 mono">(${x.symbol})</span></div>
+          <div class="text-xs text-slate-400">Coins ${fmtNum.format(x.amount)} · Monthly/coin ${fmtUSD.format(m)}</div>
+        </button>`;
+      }).join('');
       el.querySelectorAll('button').forEach(btn => btn.addEventListener('click', ()=>{
         const sym = btn.getAttribute('data-sym');
-        const x = DATA.find(r => r.symbol === sym);
-        if(!x) return;
+        const x = DATA.find(r => r.symbol === sym); if(!x) return;
         const live = document.getElementById('liveToggle').checked && livePrices[sym];
-        document.getElementById('cAmt').value = x.amount;
-        document.getElementById('cPpc').value = live ? livePrices[sym].price : x.price;
+        const apr = (parseFloat(document.getElementById('cApr').value)|| (APR_DEFAULT*100)) / 100 || APR_DEFAULT;
+        const price = live ? livePrices[sym].price : x.price;
+        const m = monthlyPerCoin(price, apr);
         document.getElementById('coinSelect').value = sym;
-        document.getElementById('cApr').value = APR*100;
+        document.getElementById('cAmt').value = x.amount;
+        document.getElementById('cMi').value = m.toFixed(6);
         updateCalc();
         document.getElementById('calc').scrollIntoView({behavior:'smooth'});
       }));
@@ -356,52 +370,58 @@
       const sel = document.getElementById('coinSelect');
       sel.innerHTML = options.map(x => `<option value="${x.symbol}">${x.name} (${x.symbol})</option>`).join('');
       sel.onchange = ()=>{
-        const sym = sel.value;
-        const x = DATA.find(r => r.symbol === sym);
-        if(!x) return;
+        const sym = sel.value; const x = DATA.find(r => r.symbol === sym); if(!x) return;
+        const apr = (parseFloat(document.getElementById('cApr').value)|| (APR_DEFAULT*100)) / 100 || APR_DEFAULT;
         const live = document.getElementById('liveToggle').checked && livePrices[sym];
+        const price = live ? livePrices[sym].price : x.price;
+        const m = monthlyPerCoin(price, apr);
         document.getElementById('cAmt').value = x.amount;
-        document.getElementById('cPpc').value = live ? livePrices[sym].price : x.price;
-        document.getElementById('cApr').value = APR*100;
+        document.getElementById('cMi').value = m.toFixed(6);
         updateCalc();
       };
       if(options[0]){
-        const first = options[0]; sel.value = first.symbol;
-        const live = document.getElementById('liveToggle').checked && livePrices[first.symbol];
-        document.getElementById('cAmt').value = first.amount;
-        document.getElementById('cPpc').value = live ? livePrices[first.symbol].price : first.price;
-        document.getElementById('cApr').value = APR*100;
-        updateCalc();
+        sel.value = options[0].symbol; sel.onchange();
       }
     }
 
     function updateCalc(){
       const amt = parseFloat(document.getElementById('cAmt').value||'0');
-      const ppc = parseFloat(document.getElementById('cPpc').value||'0');
+      const mi = parseFloat(document.getElementById('cMi').value||'0'); // monthly interest per coin ($)
       const aprPct = parseFloat(document.getElementById('cApr').value||'5');
       const months = parseInt(document.getElementById('cMonths').value||'12',10);
       const apr = (isFinite(aprPct) ? aprPct : 5) / 100;
-      const notional = amt * ppc;
-      const m = notional * (apr/12);
-      const total = m * months;
+      // implied price/coin from monthly interest per coin
+      const impliedPrice = apr>0 ? mi * 12 / apr : 0;
+      const notional = amt * impliedPrice;
+      const monthlyPortfolio = mi * amt;
+      const total = monthlyPortfolio * months;
+      document.getElementById('cPrice').textContent = fmtUSD.format(impliedPrice);
       document.getElementById('cNotional').textContent = fmtUSD.format(notional);
-      document.getElementById('cMonthly').textContent = fmtUSD.format(m);
+      document.getElementById('cMonthly').textContent = fmtUSD.format(monthlyPortfolio);
       document.getElementById('cTotal').textContent = fmtUSD.format(total);
+      // Re-render table so APR edits reflect there too
+      render();
     }
 
+    // === WIRING ===
     document.getElementById('q').addEventListener('input', render);
     document.getElementById('sort').addEventListener('change', render);
     document.getElementById('liveToggle').addEventListener('change', render);
+    ['cAmt','cMi','cApr','cMonths'].forEach(id => document.getElementById(id).addEventListener('input', updateCalc));
 
     document.getElementById('year').textContent = new Date().getFullYear();
-    render();
     fetchLivePrices();
     setInterval(()=>{ if(document.getElementById('liveToggle').checked) fetchLivePrices(); }, 60000);
+    render();
+    updateCalc();
 
     // sanity checks
     (function(){
       console.assert(Array.isArray(DATA) && DATA.length>0, 'DATA loaded');
-      const m = 100 * (APR/12); console.assert(Math.abs(m - (100*0.05/12))<1e-9,'per-coin monthly ok');
+      const apr=0.05, price=100; const m=price*apr/12; const y=price*apr; 
+      console.assert(Math.abs(m - (100*0.05/12))<1e-9,'monthly/coin ok');
+      console.assert(Math.abs(y - 5) < 1e-9,'yearly/coin ok');
+      const mi=0.4166666667; const implied = mi*12/apr; console.assert(Math.abs(implied-100)<1e-6,'implied price ok');
     })();
   </script>
 </body>
