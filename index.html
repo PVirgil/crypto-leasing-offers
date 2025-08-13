@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crypto Lending Offers — 5% APR (Classic Layout + New Calculator)</title>
-  <meta name="description" content="Professional crypto lending desk. Minimal columns with full‑color logos. Live price option for majors. Bottom calculator takes Monthly Interest/coin as input and estimates totals." />
+  <title>Crypto Lending Offers — 5% APR (Full‑Color Logos + Working Calculator)</title>
+  <meta name="description" content="Professional crypto lending desk. Minimal columns, full‑color logos with robust fallbacks, optional live pricing for majors, and a calculate-button estimator that uses Monthly Interest per Coin as input." />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html{scroll-behavior:smooth}
@@ -15,6 +15,7 @@
     .chip{font-size:11px;padding:.25rem .5rem;border-radius:9999px}
     .logo{height:32px;width:32px;border-radius:9999px;object-fit:cover}
     .placeholder{height:32px;width:32px;border-radius:9999px;display:grid;place-items:center;background:rgba(148,163,184,.15);color:#cbd5e1;font-size:12px;font-weight:700}
+    button:disabled{opacity:.6;cursor:not-allowed}
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100">
@@ -42,7 +43,7 @@
       <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
         <div class="max-w-4xl space-y-4">
           <h2 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">Institutional look. Retail simple.</h2>
-          <p class="text-slate-300">Table shows only: <strong>Name</strong>, <strong>Symbol</strong>, <strong>Amount</strong>, <strong>Monthly</strong> & <strong>Yearly</strong> interest <em>per coin</em> at a fixed <span class="font-semibold text-slate-100">5% APR</span>. Full‑color logos with graceful fallbacks. Toggle live prices for majors to refine interest math (prices stay hidden).</p>
+          <p class="text-slate-300">Table shows only: <strong>Name</strong>, <strong>Symbol</strong>, <strong>Amount</strong>, <strong>Monthly</strong> & <strong>Yearly</strong> interest <em>per coin</em> at a fixed <span class="font-semibold text-slate-100">5% APR</span>. Full‑color logos with robust fallbacks. Toggle live prices for majors to refine interest math; prices stay hidden.</p>
           <div class="text-xs text-slate-400">Estimates only — not financial advice. Not a solicitation. Terms subject to approval, KYC/AML, and availability.</div>
         </div>
       </div>
@@ -86,7 +87,7 @@
       </div>
     </section>
 
-    <!-- Calculator (Monthly Interest/Coin input) -->
+    <!-- Calculator (Monthly Interest/Coin input + Calculate button) -->
     <section id="calc" class="border-t border-white/10">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div class="card rounded-2xl p-6 ring-1 ring-white/10 grid md:grid-cols-2 gap-6 items-start">
@@ -109,6 +110,10 @@
               <label class="block text-sm">Term (months)
                 <input id="cMonths" type="number" step="1" value="12" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2" />
               </label>
+              <div class="col-span-2 flex gap-3 mt-1">
+                <button id="calcBtn" class="rounded-xl bg-cyan-500/20 text-cyan-200 px-4 py-2 hover:bg-cyan-500/30">Calculate</button>
+                <button id="resetBtn" class="rounded-xl border border-white/15 px-4 py-2 hover:bg-white/5" type="button">Reset</button>
+              </div>
             </div>
             <div class="mt-2 text-sm space-y-1">
               <div>Implied Price / Coin: <span id="cPrice" class="font-semibold"></span></div>
@@ -143,7 +148,7 @@
   <footer class="border-t border-white/10 py-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-sm text-slate-400">© <span id="year"></span> Payton Virgil · 5% APR · Interest shown per coin.</p>
-      <p class="text-xs text-slate-500">Logos use best‑effort fallbacks; if none are available an initials badge is shown.</p>
+      <p class="text-xs text-slate-500">Logos use best‑effort fallbacks (CryptoLogos → icon set color/black → initials). Some symbols may not have public logos.</p>
     </div>
   </footer>
 
@@ -168,7 +173,6 @@
       APE: 'https://cryptologos.cc/logos/apecoin-ape-ape-logo.png',
       CAKE: 'https://cryptologos.cc/logos/pancakeswap-cake-logo.png',
       MATIC: 'https://cryptologos.cc/logos/polygon-matic-logo.png',
-      SOLANA: 'https://cryptologos.cc/logos/solana-sol-logo.png',
     };
     const LOGO_BASE = 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128';
     function logoHTML(name, symbol){
@@ -189,7 +193,7 @@
     let livePrices = {};
     async function fetchLivePrices(){
       const ids = Object.values(CG_IDS).join(',');
-      const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${encodeURIComponent(ids)}&price_change_percentage=24h`;
+      const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${encodeURIComponent(ids)}`;
       try{
         const res = await fetch(url,{headers:{'accept':'application/json'}});
         if(!res.ok) throw new Error('HTTP '+res.status);
@@ -294,7 +298,6 @@
       { name:'Bubble', symbol:'BBLE', amount:3150, price:0.0000000000002 },
     ];
 
-    // === TABLE RENDERING ===
     function monthlyPerCoin(price, apr){ return price * (apr/12); }
     function yearlyPerCoin(price, apr){ return price * apr; }
 
@@ -339,7 +342,6 @@
       buildCoinSelect(rows);
     }
 
-    // === QUICK PICKS & CALC ===
     function buildQuick(list, apr){
       const el = document.getElementById('quick'); if(!el) return;
       el.innerHTML = list.map(x => {
@@ -361,7 +363,8 @@
         document.getElementById('coinSelect').value = sym;
         document.getElementById('cAmt').value = x.amount;
         document.getElementById('cMi').value = m.toFixed(6);
-        updateCalc();
+        // user must click Calculate, but we also compute instantly for UX
+        computeCalc();
         document.getElementById('calc').scrollIntoView({behavior:'smooth'});
       }));
     }
@@ -377,21 +380,18 @@
         const m = monthlyPerCoin(price, apr);
         document.getElementById('cAmt').value = x.amount;
         document.getElementById('cMi').value = m.toFixed(6);
-        updateCalc();
+        // don't auto compute; wait for Calculate click to respect user request
       };
-      if(options[0]){
-        sel.value = options[0].symbol; sel.onchange();
-      }
+      if(options[0]){ sel.value = options[0].symbol; sel.onchange(); }
     }
 
-    function updateCalc(){
+    function computeCalc(){
       const amt = parseFloat(document.getElementById('cAmt').value||'0');
       const mi = parseFloat(document.getElementById('cMi').value||'0'); // monthly interest per coin ($)
       const aprPct = parseFloat(document.getElementById('cApr').value||'5');
       const months = parseInt(document.getElementById('cMonths').value||'12',10);
       const apr = (isFinite(aprPct) ? aprPct : 5) / 100;
-      // implied price/coin from monthly interest per coin
-      const impliedPrice = apr>0 ? mi * 12 / apr : 0;
+      const impliedPrice = apr>0 ? mi * 12 / apr : 0; // price/coin implied by monthly interest
       const notional = amt * impliedPrice;
       const monthlyPortfolio = mi * amt;
       const total = monthlyPortfolio * months;
@@ -399,21 +399,33 @@
       document.getElementById('cNotional').textContent = fmtUSD.format(notional);
       document.getElementById('cMonthly').textContent = fmtUSD.format(monthlyPortfolio);
       document.getElementById('cTotal').textContent = fmtUSD.format(total);
-      // Re-render table so APR edits reflect there too
+      // Refresh header APR label & table interest amounts
       render();
+    }
+
+    function resetCalc(){
+      const sel = document.getElementById('coinSelect');
+      if(sel.options.length){ sel.selectedIndex = 0; sel.onchange(); }
+      document.getElementById('cMonths').value = 12;
+      document.getElementById('cApr').value = 5;
+      document.getElementById('cPrice').textContent = '';
+      document.getElementById('cNotional').textContent = '';
+      document.getElementById('cMonthly').textContent = '';
+      document.getElementById('cTotal').textContent = '';
     }
 
     // === WIRING ===
     document.getElementById('q').addEventListener('input', render);
     document.getElementById('sort').addEventListener('change', render);
     document.getElementById('liveToggle').addEventListener('change', render);
-    ['cAmt','cMi','cApr','cMonths'].forEach(id => document.getElementById(id).addEventListener('input', updateCalc));
+    document.getElementById('calcBtn').addEventListener('click', (e)=>{ e.preventDefault(); computeCalc(); });
+    document.getElementById('resetBtn').addEventListener('click', (e)=>{ e.preventDefault(); resetCalc(); });
 
     document.getElementById('year').textContent = new Date().getFullYear();
     fetchLivePrices();
     setInterval(()=>{ if(document.getElementById('liveToggle').checked) fetchLivePrices(); }, 60000);
     render();
-    updateCalc();
+    // initial calc not auto-run; user clicks Calculate
 
     // sanity checks
     (function(){
@@ -426,4 +438,5 @@
   </script>
 </body>
 </html>
+
 
